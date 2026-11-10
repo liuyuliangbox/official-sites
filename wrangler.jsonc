@@ -1,6 +1,7 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "gaming-community",
+	// Official site (game line). Worker name = site-{line}.
+	"name": "site-game",
 	"main": "workers/site.js",
 	"compatibility_date": "2025-09-27",
 	"assets": {
@@ -10,5 +11,11 @@
 	},
 	"observability": {
 		"enabled": true
-	}
+	},
+	"routes": [
+		{
+			"pattern": "site-game.aridjaya.eu.org",
+			"custom_domain": true
+		}
+	]
 }

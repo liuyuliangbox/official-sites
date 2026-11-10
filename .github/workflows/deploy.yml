@@ -1,4 +1,4 @@
-name: Build and Deploy Site
+name: Build and Deploy Sites
 
 on:
   schedule:
@@ -9,9 +9,9 @@ on:
     branches: [main]
 
 jobs:
-  deploy:
+  deploy-game:
     runs-on: ubuntu-latest
-    name: Sync forum + deploy Worker
+    name: Deploy site-game
     steps:
       - uses: actions/checkout@v4
 
@@ -23,19 +23,55 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Sync forum + build
+      - name: Sync forum + build (game)
         env:
-          FORUM_API_BASE: https://bbs.aridjaya.eu.org
+          SITE_LINE: game
+          SITE_URL: https://site-game.aridjaya.eu.org
+          BBS_URL: https://bbs-game.aridjaya.eu.org
+          FORUM_API_BASE: https://bbs-game.aridjaya.eu.org
         run: npm run build
 
-      - name: Deploy Worker (Assets)
+      - name: Deploy site-game Worker
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
         run: |
           if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
             echo "CF_API_TOKEN / CF_ACCOUNT_ID not set in this repo."
-            echo "Daily/manual deploy: use CForum → Rebuild Official Site."
+            echo "Daily/manual deploy: use CForum → Rebuild Official Sites."
             exit 0
           fi
-          npx wrangler deploy
+          npx wrangler deploy -c wrangler.jsonc
+
+  deploy-paint:
+    runs-on: ubuntu-latest
+    name: Deploy site-paint-board
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Sync forum + build (paint)
+        env:
+          SITE_LINE: paint
+          SITE_URL: https://site-paint-board.aridjaya.eu.org
+          BBS_URL: https://bbs-paint-board.aridjaya.eu.org
+          FORUM_API_BASE: https://bbs-paint-board.aridjaya.eu.org
+        run: npm run build
+
+      - name: Deploy site-paint-board Worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "CF_API_TOKEN / CF_ACCOUNT_ID not set; skip paint site deploy."
+            exit 0
+          fi
+          npx wrangler deploy -c wrangler.site-paint-board.jsonc

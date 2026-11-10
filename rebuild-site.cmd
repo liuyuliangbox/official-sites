@@ -3,8 +3,8 @@ setlocal
 cd /d "%~dp0"
 
 echo.
-echo  Rebuild Official Site (forum sync + Workers deploy)
-echo  Repo: liuyuliangbox/CForum  workflow: Rebuild Official Site
+echo  Rebuild Official Sites (forum sync + Workers deploy)
+echo  Repo: liuyuliangbox/CForum  workflow: Rebuild Official Sites
 echo.
 
 where gh >nul 2>&1
@@ -22,7 +22,7 @@ if errorlevel 1 (
 )
 
 echo Triggering workflow...
-gh workflow run "Rebuild Official Site" --repo liuyuliangbox/CForum
+gh workflow run "Rebuild Official Sites" --repo liuyuliangbox/CForum
 if errorlevel 1 (
   echo [ERROR] Failed to trigger workflow.
   pause
@@ -35,7 +35,8 @@ timeout /t 2 /nobreak >nul
 start "" "https://github.com/liuyuliangbox/CForum/actions/workflows/rebuild-official-site.yml"
 
 echo Done. Close this window after the run succeeds, then check:
-echo   https://game.aridjaya.eu.org/logs/
+echo   https://site-game.aridjaya.eu.org/logs/
+echo   https://site-paint-board.aridjaya.eu.org/logs/
 echo.
 pause
 endlocal

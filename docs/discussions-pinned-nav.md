@@ -8,10 +8,11 @@
 
 ## 快速链接
 
-- 官网：https://game.aridjaya.eu.org
-- 开发日志：https://game.aridjaya.eu.org/logs/
-- 社区规则：https://game.aridjaya.eu.org/community/
-- 下载 / 内测：https://game.aridjaya.eu.org/download/（尚未开放）
+- 官网：https://site-game.aridjaya.eu.org
+- 开发日志：https://site-game.aridjaya.eu.org/logs/
+- 社区规则：https://site-game.aridjaya.eu.org/community/
+- 下载 / 内测：https://site-game.aridjaya.eu.org/download/（尚未开放）
+- 社区：https://bbs-game.aridjaya.eu.org
 
 ## 分类怎么用
 

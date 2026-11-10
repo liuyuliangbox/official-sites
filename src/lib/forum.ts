@@ -68,7 +68,7 @@ export type ForumPost = ForumPostIndex & {
 const dataDir = path.join(process.cwd(), 'src', 'data', 'forum');
 
 const DEFAULT_FRIEND_LINKS: FriendLink[] = [
-	{ label: '社区 bbs.aridjaya.eu.org', url: BBS_URL },
+	{ label: `社区 ${BBS_URL.replace(/^https?:\/\//, '')}`, url: BBS_URL },
 ];
 
 const DEFAULT_SITE_META: SiteMeta = {

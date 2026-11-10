@@ -10,6 +10,8 @@
     "sync:forum": "node scripts/sync-forum.mjs",
     "build": "npm run sync:forum && astro build",
     "build:offline": "astro build",
+    "deploy:game": "npx wrangler deploy -c wrangler.jsonc",
+    "deploy:paint": "npx wrangler deploy -c wrangler.site-paint-board.jsonc",
     "preview": "astro preview",
     "astro": "astro",
     "migrate:logs": "node scripts/migrate-logs-to-forum.mjs"

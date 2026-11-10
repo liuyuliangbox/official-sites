@@ -7,20 +7,53 @@ const root = path.resolve(__dirname, '..');
 const outDir = path.join(root, 'src', 'data', 'forum');
 const postsDir = path.join(outDir, 'posts');
 
-const FORUM_API_BASE = (process.env.FORUM_API_BASE || 'https://bbs.aridjaya.eu.org').replace(/\/+$/, '');
+const SITE_LINE = (process.env.SITE_LINE || 'game').toLowerCase();
+const isPaint = SITE_LINE === 'paint';
 
-const DEFAULT_SITE_META = {
-	site_brand: 'liuyuliangbox',
-	project_codename: 'Project Turn',
-	working_title_note: '正式名称待定 / Working Title',
-	product_tagline: '单人修道，一回合定势。江湖未定，先把战斗打通。',
-	site_description: '单人优先的回合制 RPG。开发日志、社区反馈与内测资讯。正式名称待定。',
-	community_home_url: 'https://bbs.aridjaya.eu.org',
-	footer_rights: '保留所有权利。',
-	friend_links: JSON.stringify([
-		{ label: '社区 bbs.aridjaya.eu.org', url: 'https://bbs.aridjaya.eu.org' }
-	])
-};
+const FORUM_API_BASE = (
+	process.env.FORUM_API_BASE ||
+	(isPaint
+		? 'https://bbs-paint-board.aridjaya.eu.org'
+		: 'https://bbs-game.aridjaya.eu.org')
+).replace(/\/+$/, '');
+
+const DEFAULT_SITE_META = isPaint
+	? {
+			site_brand: 'Paint Board',
+			project_codename: 'Paint Board',
+			working_title_note: '画板产品线官网',
+			product_tagline: '创作画板 · 云端同步 · 社区共创',
+			site_description:
+				'创作画板与社区。同步云端作品、分享灵感，账号由社区统一管理。',
+			community_home_url: 'https://bbs-paint-board.aridjaya.eu.org',
+			footer_rights: '保留所有权利。',
+			friend_links: JSON.stringify([
+				{
+					label: '社区 bbs-paint-board.aridjaya.eu.org',
+					url: 'https://bbs-paint-board.aridjaya.eu.org'
+				},
+				{
+					label: '打开画板',
+					url: 'https://paint-board.aridjaya.eu.org'
+				}
+			])
+		}
+	: {
+			site_brand: 'liuyuliangbox',
+			project_codename: 'Project Turn',
+			working_title_note: '正式名称待定 / Working Title',
+			product_tagline: '单人修道，一回合定势。江湖未定，先把战斗打通。',
+			site_description:
+				'单人优先的回合制 RPG。开发日志、社区反馈与内测资讯。正式名称待定。',
+			community_home_url: 'https://bbs-game.aridjaya.eu.org',
+			footer_rights: '保留所有权利。',
+			friend_links: JSON.stringify([
+				{
+					label: '社区 bbs-game.aridjaya.eu.org',
+					url: 'https://bbs-game.aridjaya.eu.org'
+				}
+			])
+		};
 
 async function fetchJson(url) {
 	const res = await fetch(url, {

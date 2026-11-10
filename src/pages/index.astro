@@ -2,12 +2,13 @@
 import CoverPlaceholder from '../components/CoverPlaceholder.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { APP_URL, BBS_URL } from '../consts';
 import { getSiteFeaturedPosts, getSiteMeta, parseForumDate } from '../lib/forum';
 
 const meta = getSiteMeta();
 const posts = getSiteFeaturedPosts(3);
 const productLine = meta.product_tagline || meta.working_title_note;
-const communityHome = meta.community_home_url;
+const communityHome = meta.community_home_url || BBS_URL;
 ---
 
 <BaseLayout title={meta.site_brand} description={meta.site_description}>
@@ -24,7 +25,14 @@ const communityHome = meta.community_home_url;
 				) : null
 			}
 			<div class="cta fade-up-delay-2">
-				<a class="btn btn-primary" href="#featured">最新社区精选</a>
+				{APP_URL ? (
+					<a class="btn btn-primary" href={APP_URL}>打开画板</a>
+				) : (
+					<a class="btn btn-primary" href="#featured">最新社区精选</a>
+				)}
+				<a class="btn btn-ghost" href={communityHome} target="_blank" rel="noopener noreferrer">
+					进入社区
+				</a>
 			</div>
 		</div>
 	</section>
