@@ -1,7 +1,7 @@
 /**
  * One-shot: migrate src/content/logs/*.md into forum category「开发进度」.
  * Usage:
- *   FORUM_API_BASE=https://bbs.aridjaya.eu.org \
+ *   FORUM_API_BASE=https://bbs-game.aridjaya.eu.org \
  *   FORUM_ADMIN_EMAIL=admin@adysec.com \
  *   FORUM_ADMIN_PASSWORD='...' \
  *   node scripts/migrate-logs-to-forum.mjs
@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const logsDir = path.resolve(__dirname, '../src/content/logs');
-const FORUM_API_BASE = (process.env.FORUM_API_BASE || 'https://bbs.aridjaya.eu.org').replace(/\/+$/, '');
+const FORUM_API_BASE = (process.env.FORUM_API_BASE || 'https://bbs-game.aridjaya.eu.org').replace(/\/+$/, '');
 const email = process.env.FORUM_ADMIN_EMAIL || 'admin@adysec.com';
 const password = process.env.FORUM_ADMIN_PASSWORD;
 

@@ -5,6 +5,7 @@ import {
 	BBS_URL,
 	PROJECT_CODENAME,
 	SITE_DESCRIPTION,
+	SITE_TAGLINE,
 	SITE_TITLE,
 	WORKING_TITLE_NOTE,
 } from '../consts';
@@ -75,7 +76,7 @@ const DEFAULT_SITE_META: SiteMeta = {
 	site_brand: SITE_TITLE,
 	project_codename: PROJECT_CODENAME,
 	working_title_note: WORKING_TITLE_NOTE,
-	product_tagline: '单人修道，一回合定势。江湖未定，先把战斗打通。',
+	product_tagline: SITE_TAGLINE,
 	site_description: SITE_DESCRIPTION,
 	community_home_url: BBS_URL,
 	footer_rights: '保留所有权利。',
