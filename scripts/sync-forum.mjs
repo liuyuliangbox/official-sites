@@ -175,7 +175,16 @@ async function main() {
 		}
 	}
 
-	const meta = { ...DEFAULT_SITE_META, ...(siteMeta || {}) };
+	const incoming = siteMeta && typeof siteMeta === 'object' ? siteMeta : {};
+	const looksGameSeed =
+		String(incoming.project_codename || '') === 'Project Turn' ||
+		String(incoming.community_home_url || '').includes('bbs-game.aridjaya.eu.org') ||
+		String(incoming.community_home_url || '').includes('bbs.aridjaya.eu.org');
+	// Paint forum D1 may still export shared game brand seed — keep paint defaults.
+	const meta =
+		isPaint && looksGameSeed
+			? { ...DEFAULT_SITE_META }
+			: { ...DEFAULT_SITE_META, ...incoming };
 	await fs.writeFile(path.join(outDir, 'categories.json'), JSON.stringify(sortedCategories, null, 2) + '\n', 'utf8');
 	await fs.writeFile(path.join(outDir, 'posts-index.json'), JSON.stringify(index, null, 2) + '\n', 'utf8');
 	await fs.writeFile(path.join(outDir, 'site-meta.json'), JSON.stringify(meta, null, 2) + '\n', 'utf8');
