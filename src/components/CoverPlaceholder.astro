@@ -1,20 +1,33 @@
 ---
+import { getLineConfig } from '../lines';
+
 interface Props {
 	label?: string | null;
 	class?: string;
 }
 
 const { label, class: className } = Astro.props;
+const line = getLineConfig();
 const text = String(label || '日志').trim() || '日志';
 /** Stable accent from category name — keeps list tiles varied but on-brand */
 let hash = 0;
 for (let i = 0; i < text.length; i++) hash = (hash * 31 + text.charCodeAt(i)) >>> 0;
-const tones = [
+
+const gameTones = [
 	{ a: 'rgba(42, 107, 114, 0.55)', b: 'rgba(28, 42, 56, 0.92)', c: 'rgba(184, 90, 42, 0.28)' },
 	{ a: 'rgba(143, 67, 28, 0.5)', b: 'rgba(28, 42, 56, 0.9)', c: 'rgba(42, 107, 114, 0.32)' },
 	{ a: 'rgba(58, 74, 92, 0.55)', b: 'rgba(21, 32, 43, 0.92)', c: 'rgba(184, 90, 42, 0.22)' },
 	{ a: 'rgba(61, 138, 146, 0.48)', b: 'rgba(28, 42, 56, 0.88)', c: 'rgba(143, 67, 28, 0.3)' },
 ];
+
+const paintTones = [
+	{ a: 'rgba(31, 107, 92, 0.5)', b: 'rgba(30, 40, 44, 0.94)', c: 'rgba(90, 110, 120, 0.28)' },
+	{ a: 'rgba(45, 90, 100, 0.45)', b: 'rgba(26, 32, 36, 0.92)', c: 'rgba(31, 107, 92, 0.3)' },
+	{ a: 'rgba(70, 80, 88, 0.5)', b: 'rgba(28, 34, 38, 0.93)', c: 'rgba(50, 120, 105, 0.25)' },
+	{ a: 'rgba(31, 107, 92, 0.4)', b: 'rgba(34, 42, 46, 0.9)', c: 'rgba(120, 130, 135, 0.22)' },
+];
+
+const tones = line.id === 'paint' ? paintTones : gameTones;
 const tone = tones[hash % tones.length];
 const short = text.length > 6 ? `${text.slice(0, 5)}…` : text;
 ---
@@ -86,6 +99,25 @@ const short = text.length > 6 ? `${text.slice(0, 5)}…` : text;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
+	}
+
+	:global(html[data-site-line='paint']) .cover-ph {
+		border-radius: 0.35rem;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+	}
+
+	:global(html[data-site-line='paint']) .ph-label {
+		letter-spacing: 0.06em;
+		color: rgba(244, 255, 251, 0.94);
+	}
+
+	:global(html[data-site-line='paint']) .ph-rule {
+		background: linear-gradient(
+			90deg,
+			transparent,
+			rgba(244, 255, 251, 0.4),
+			transparent
+		);
 	}
 
 	@media (max-width: 720px) {

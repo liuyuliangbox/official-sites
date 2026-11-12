@@ -47,11 +47,11 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 				{pageLead ? <p class="lead">{pageLead}</p> : null}
 
 				{posts.length === 0 ? (
-					<p class="empty">该栏目暂无同步内容。</p>
+					<p class="empty reveal-on-scroll">该栏目暂无同步内容。</p>
 				) : (
 					<ul class="log-list">
-						{posts.map((post) => (
-							<li>
+						{posts.map((post, i) => (
+							<li class="reveal-on-scroll" style={`--reveal-i:${i}`}>
 								<p class="meta">
 									<FormattedDate date={parseForumDate(post.created_at)} />
 									{post.author_name ? <> · {post.author_name}</> : null}
@@ -114,6 +114,7 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 
 	.log-list li {
 		padding-top: 0.85rem;
+		transition-delay: calc(var(--reveal-i, 0) * 55ms);
 	}
 
 	.log-list li + li {

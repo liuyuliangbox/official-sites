@@ -3,12 +3,26 @@ import CoverPlaceholder from '../components/CoverPlaceholder.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { APP_URL, BBS_URL } from '../consts';
+import { getLineConfig } from '../lines';
 import { getSiteFeaturedPosts, getSiteMeta, parseForumDate } from '../lib/forum';
 
+const line = getLineConfig();
 const meta = getSiteMeta();
 const posts = getSiteFeaturedPosts(3);
 const productLine = meta.product_tagline || meta.working_title_note;
 const communityHome = meta.community_home_url || BBS_URL;
+
+const primaryText =
+	line.heroPrimary === 'project_codename' ? meta.project_codename : meta.site_brand;
+const secondaryText =
+	line.heroSecondary === 'site_brand' ? meta.site_brand : meta.project_codename;
+
+const primaryHref =
+	line.primaryCtaKind === 'app' && APP_URL ? APP_URL : '#featured';
+const primaryLabel =
+	line.primaryCtaKind === 'app' && !APP_URL
+		? '最新社区精选'
+		: line.primaryCtaLabel;
 ---
 
 <BaseLayout title={meta.site_brand} description={meta.site_description}>
@@ -16,39 +30,42 @@ const communityHome = meta.community_home_url || BBS_URL;
 		<div class="hero-plane" aria-hidden="true"></div>
 		<div class="mist" aria-hidden="true"></div>
 		<div class="container hero-inner">
-			<p class="studio fade-up">{meta.site_brand}</p>
-			<h1 class="codename fade-up-delay">{meta.project_codename}</h1>
+			<p class="eyebrow fade-up">{secondaryText}</p>
+			<h1 class="hero-brand fade-up-delay">{primaryText}</h1>
 			<p class="tagline fade-up-delay-2">{productLine}</p>
 			{
 				meta.working_title_note && meta.working_title_note !== productLine ? (
 					<p class="note fade-up-delay-2">{meta.working_title_note}</p>
 				) : null
 			}
-			<div class="cta fade-up-delay-2">
-				{APP_URL ? (
-					<a class="btn btn-primary" href={APP_URL}>打开画板</a>
-				) : (
-					<a class="btn btn-primary" href="#featured">最新社区精选</a>
-				)}
-				<a class="btn btn-ghost" href={communityHome} target="_blank" rel="noopener noreferrer">
-					进入社区
+			<div class="cta fade-up-delay-3">
+				<a class="btn btn-primary" href={primaryHref}>{primaryLabel}</a>
+				<a
+					class="btn btn-ghost"
+					href={communityHome}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					{line.secondaryCtaLabel}
 				</a>
 			</div>
 		</div>
 	</section>
 
 	<section id="featured" class="container section latest">
-		<div class="section-head">
+		<div class="section-head reveal-on-scroll">
 			<h2>最新社区精选</h2>
 			<a href={communityHome} target="_blank" rel="noopener noreferrer">查看更多</a>
 		</div>
 		{
 			posts.length === 0 ? (
-				<p class="empty">暂无社区精选。在社区后台将帖子标为「官网精选」后，重建官网即可出现在此。</p>
+				<p class="empty reveal-on-scroll">
+					暂无社区精选。在社区后台将帖子标为「官网精选」后，重建官网即可出现在此。
+				</p>
 			) : (
 				<ul class="log-list">
-					{posts.map((post) => (
-						<li>
+					{posts.map((post, i) => (
+						<li class="reveal-on-scroll" style={`--reveal-i:${i}`}>
 							<p class="meta">
 								<FormattedDate date={parseForumDate(post.created_at)} />
 								{post.category_name ? <> · {post.category_name}</> : null}
@@ -93,12 +110,8 @@ const communityHome = meta.community_home_url || BBS_URL;
 		position: absolute;
 		inset: 0;
 		z-index: -2;
-		background:
-			linear-gradient(180deg, rgba(18, 28, 36, 0.2) 0%, rgba(12, 20, 28, 0.72) 100%),
-			radial-gradient(ellipse 90% 55% at 78% 18%, rgba(56, 92, 88, 0.38), transparent 58%),
-			radial-gradient(ellipse 70% 48% at 12% 78%, rgba(140, 72, 40, 0.22), transparent 52%),
-			linear-gradient(148deg, #121c24 0%, #1a2c34 42%, #2a221c 100%);
-		animation: planeShift 20s ease-in-out infinite alternate;
+		background: var(--hero-plane);
+		animation: planeShift 22s ease-in-out infinite alternate;
 	}
 
 	.mist {
@@ -109,7 +122,13 @@ const communityHome = meta.community_home_url || BBS_URL;
 		background:
 			radial-gradient(ellipse 60% 35% at 50% 88%, rgba(238, 243, 247, 0.14), transparent 70%),
 			radial-gradient(ellipse 40% 25% at 30% 60%, rgba(200, 220, 220, 0.06), transparent 65%);
-		animation: mistDrift 14s ease-in-out infinite alternate;
+		animation: mistDrift 16s ease-in-out infinite alternate;
+	}
+
+	:global(html[data-site-line='paint']) .mist {
+		background:
+			radial-gradient(ellipse 55% 30% at 48% 90%, rgba(250, 250, 248, 0.12), transparent 70%),
+			radial-gradient(ellipse 35% 22% at 70% 40%, rgba(31, 107, 92, 0.08), transparent 65%);
 	}
 
 	.hero-plane::after {
@@ -124,14 +143,19 @@ const communityHome = meta.community_home_url || BBS_URL;
 		mask-image: linear-gradient(180deg, #000 15%, transparent 88%);
 	}
 
+	:global(html[data-site-line='paint']) .hero-plane::after {
+		background-size: 32px 32px;
+		opacity: 0.22;
+	}
+
 	@keyframes planeShift {
 		from {
 			filter: saturate(1) brightness(1);
 			transform: scale(1);
 		}
 		to {
-			filter: saturate(1.06) brightness(1.03);
-			transform: scale(1.025);
+			filter: saturate(1.05) brightness(1.025);
+			transform: scale(1.02);
 		}
 	}
 
@@ -142,19 +166,29 @@ const communityHome = meta.community_home_url || BBS_URL;
 		}
 		to {
 			opacity: 1;
-			transform: translateY(-1.2%);
+			transform: translateY(-1.1%);
 		}
 	}
 
 	.hero-inner {
 		padding: 6rem 0 4.5rem;
-		color: #f4f7fa;
+		color: var(--hero-ink);
 	}
 
-	.studio {
-		margin: 0 0 0.75rem;
+	.eyebrow {
+		margin: 0 0 0.65rem;
 		font-family: var(--font-display);
-		font-size: clamp(2.4rem, 8vw, 5.2rem);
+		font-size: 0.95rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--hero-muted);
+	}
+
+	.hero-brand {
+		margin: 0 0 1rem;
+		font-family: var(--font-display);
+		font-size: clamp(2.6rem, 9vw, 5.4rem);
 		font-weight: 800;
 		letter-spacing: -0.045em;
 		line-height: 0.95;
@@ -162,11 +196,9 @@ const communityHome = meta.community_home_url || BBS_URL;
 		text-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
 	}
 
-	.codename {
-		margin: 0 0 1rem;
-		font-size: clamp(1.25rem, 3vw, 1.85rem);
-		font-weight: 600;
-		color: rgba(255, 247, 240, 0.9);
+	:global(html[data-site-line='paint']) .hero-brand {
+		letter-spacing: -0.035em;
+		text-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
 	}
 
 	.tagline {
@@ -187,7 +219,7 @@ const communityHome = meta.community_home_url || BBS_URL;
 	.note {
 		margin: 0;
 		font-size: 0.85rem;
-		color: rgba(238, 243, 247, 0.62);
+		color: var(--hero-muted);
 	}
 
 	.section {
@@ -210,13 +242,13 @@ const communityHome = meta.community_home_url || BBS_URL;
 		text-decoration: none;
 		font-weight: 600;
 		font-size: 0.95rem;
-		color: var(--copper);
+		color: var(--accent);
 		border-bottom: 1px solid transparent;
 		transition: border-color 0.2s var(--ease);
 	}
 
 	.section-head a:hover {
-		border-bottom-color: var(--copper);
+		border-bottom-color: var(--accent);
 	}
 
 	.empty {
@@ -233,6 +265,7 @@ const communityHome = meta.community_home_url || BBS_URL;
 
 	.log-list li {
 		padding-top: 0.85rem;
+		transition-delay: calc(var(--reveal-i, 0) * 60ms);
 	}
 
 	.log-list li + li {
@@ -294,6 +327,13 @@ const communityHome = meta.community_home_url || BBS_URL;
 		-webkit-line-clamp: 2;
 		-webkit-box-orient: vertical;
 		overflow: hidden;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.hero-plane,
+		.mist {
+			animation: none !important;
+		}
 	}
 
 	@media (max-width: 720px) {

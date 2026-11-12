@@ -7,9 +7,13 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "dev:game": "node scripts/run-with-line.mjs game dev",
+    "dev:paint": "node scripts/run-with-line.mjs paint dev",
     "sync:forum": "node scripts/sync-forum.mjs",
     "build": "npm run sync:forum && astro build",
     "build:offline": "astro build",
+    "build:game": "node scripts/run-with-line.mjs game build:offline",
+    "build:paint": "node scripts/run-with-line.mjs paint build:offline",
     "deploy:game": "npx wrangler deploy -c wrangler.jsonc",
     "deploy:paint": "npx wrangler deploy -c wrangler.site-paint-board.jsonc",
     "preview": "astro preview",
