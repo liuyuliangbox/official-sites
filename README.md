@@ -1,8 +1,10 @@
-# Gaming-Community
+# official-sites（原 Gaming-Community）
 
-liuyuliangbox 双产品线**官网**（Astro → Cloudflare Workers + Assets）。
+liuyuliangbox 双产品线**官网**（Astro → Cloudflare Workers + Assets）。GitHub 仓名：`liuyuliangbox/official-sites`。
 
 **一仓一分支**：`main` 同时服务游戏与画板；用 `SITE_LINE` + [`src/lines/`](src/lines/) 配置区分主题、纹理、动效与默认文案，不按产品线长期分叉。
+
+**评论 / 海外讨论**：共用 [`liuyuliangbox/community`](https://github.com/liuyuliangbox/community) Discussions + Giscus（见 [docs/giscus-community.md](docs/giscus-community.md)）。中文主社区仍是对应 `bbs-*`。
 
 | 产品线 | `SITE_LINE` | Worker | 自定义域 | 社区 |
 |---|---|---|---|---|

@@ -13,7 +13,8 @@ export const gameLine: SiteLineConfig = {
 	primaryCtaKind: 'featured',
 	secondaryCtaLabel: '进入社区',
 	appUrl: '',
-	discussionsUrl: 'https://github.com/liuyuliangbox/Gaming-Community/discussions',
+	/** Studio hub — overseas / GitHub users. Primary community stays on bbs-game. */
+	discussionsUrl: 'https://github.com/liuyuliangbox/community/discussions',
 	defaults: {
 		studioName: 'liuyuliangbox',
 		projectCodename: 'Project Turn',
@@ -24,11 +25,13 @@ export const gameLine: SiteLineConfig = {
 		workingTitleNote: '正式名称待定 / Working Title',
 	},
 	giscus: {
-		repo: 'liuyuliangbox/Gaming-Community',
-		repoId: 'R_kgDOVg4cNg',
-		category: '闲聊/General',
-		categoryId: 'DIC_kwDOVg4cNs4DKRAY',
-		mapping: 'pathname',
+		repo: 'liuyuliangbox/community',
+		repoId: 'R_kgDOVrvV3g',
+		/** Rename on GitHub to「Site · Project Turn」when possible (ID stays). */
+		category: 'Announcements',
+		categoryId: 'DIC_kwDOVrvV3s4DK9OY',
+		/** Full URL avoids colliding with paint on the same pathname. */
+		mapping: 'url',
 		strict: '0',
 		reactionsEnabled: '1',
 		emitMetadata: '0',

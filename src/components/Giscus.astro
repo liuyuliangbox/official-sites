@@ -27,14 +27,15 @@ const ready = Boolean(GISCUS.repoId && GISCUS.categoryId);
 			/>
 		) : (
 			<div class="giscus-placeholder">
-				<p>评论即将接入 Giscus（基于 GitHub Discussions）。</p>
+				<p>评论即将接入 Giscus（工作室仓 liuyuliangbox/community）。</p>
 				<p>
-					请在仓库启用 Discussions 后，到
-					<a href="https://giscus.app/zh-CN" target="_blank" rel="noopener noreferrer"
-						>giscus.app</a
+					请安装
+					<a href="https://github.com/apps/giscus" target="_blank" rel="noopener noreferrer"
+						>giscus app</a
 					>
-					生成配置，填入 <code>src/consts.ts</code> 中的 <code>repoId</code> 与
-					<code>categoryId</code>。
+					到该仓，并确认 <code>src/lines/*.ts</code> 中 <code>repoId</code> /
+					<code>categoryId</code> 已填。详见
+					<code>docs/giscus-community.md</code>。
 				</p>
 			</div>
 		)

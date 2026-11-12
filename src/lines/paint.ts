@@ -13,7 +13,8 @@ export const paintLine: SiteLineConfig = {
 	primaryCtaKind: 'app',
 	secondaryCtaLabel: '进入社区',
 	appUrl: 'https://paint-board.aridjaya.eu.org',
-	discussionsUrl: 'https://github.com/liuyuliangbox/paint-board/discussions',
+	/** Studio hub — overseas / GitHub users. Primary community stays on bbs-paint-board. */
+	discussionsUrl: 'https://github.com/liuyuliangbox/community/discussions',
 	defaults: {
 		studioName: 'liuyuliangbox',
 		projectCodename: 'Paint Board',
@@ -24,11 +25,12 @@ export const paintLine: SiteLineConfig = {
 		workingTitleNote: '画板产品线官网',
 	},
 	giscus: {
-		repo: 'liuyuliangbox/paint-board',
-		repoId: '',
-		category: 'General',
-		categoryId: '',
-		mapping: 'pathname',
+		repo: 'liuyuliangbox/community',
+		repoId: 'R_kgDOVrvV3g',
+		/** Separate category from game. Rename to「Site · Paint Board」when possible. */
+		category: 'Show and tell',
+		categoryId: 'DIC_kwDOVrvV3s4DK9Oc',
+		mapping: 'url',
 		strict: '0',
 		reactionsEnabled: '1',
 		emitMetadata: '0',

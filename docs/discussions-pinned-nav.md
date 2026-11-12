@@ -1,38 +1,28 @@
-# 社区导航（置顶帖草稿）
+# 工作室 Discussions 置顶草稿（community）
 
-复制到 GitHub Discussions 置顶：
+复制到 https://github.com/liuyuliangbox/community/discussions （建议分类 Studio / General）：
 
 ---
 
-欢迎来到 **liuyuliangbox / Project Turn** 社区。
+Welcome to **liuyuliangbox** on GitHub.
 
-## 快速链接
+This Discussions hub is for **overseas visitors and GitHub-native users**.  
+Primary communities (accounts, posts, site CMS) live on our bbs sites.
 
-- 官网：https://site-game.aridjaya.eu.org
-- 开发日志：https://site-game.aridjaya.eu.org/logs/
-- 社区规则：https://site-game.aridjaya.eu.org/community/
-- 下载 / 内测：https://site-game.aridjaya.eu.org/download/（尚未开放）
-- 社区：https://bbs-game.aridjaya.eu.org
+## Official sites
 
-## 分类怎么用
+- Game: https://site-game.aridjaya.eu.org  
+- Paint Board: https://site-paint-board.aridjaya.eu.org  
 
-- **开发进度**：官方摘要与征集反馈
-- **玩法建议**：设计讨论，欢迎投票
-- **Bug / 体验反馈**：请尽量写清复现步骤
-- **美术与氛围**：画面、音乐、气质讨论
-- **闲聊 / 招募测试**：轻松闲聊与测试招募
+## Primary communities (bbs)
 
-## 反馈模板
+- Game: https://bbs-game.aridjaya.eu.org  
+- Paint Board: https://bbs-paint-board.aridjaya.eu.org  
 
-```text
-【环境】Windows / ...
-【版本】（日志编号或构建号）
-【现象】
-【复现步骤】
-1.
-2.
-【期望】
-【截图或录屏】
-```
+## How categories are used
 
-正式游戏名称待定（Working Title）。
+- **Site · Project Turn** / **Site · Paint Board** (or current Announcements / Show and tell): page comments via Giscus — please prefer commenting on the site page.
+- **Project Turn** / **Paint Board**: open product chat for GitHub users.
+- **Studio**: cross-project intros, studio news.
+
+中文用户请优先使用 bbs 社区；此处评论需 GitHub 登录。
