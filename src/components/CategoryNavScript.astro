@@ -1,0 +1,160 @@
+---
+/**
+ * Client helpers for category chrome:
+ * - scroll active tab into view
+ * - swipe / keyboard / trackpad → adjacent stop (首页 + 栏目)
+ */
+import { getForumCategories } from '../lib/forum';
+
+const categories = getForumCategories();
+const stops = [
+	{ id: 'home', href: '/', label: '首页' },
+	...categories.map((c) => ({
+		id: String(c.id),
+		href: `/logs/c/${c.id}/`,
+		label: c.name,
+	})),
+];
+---
+
+<script type="application/json" id="pb-category-stops" set:html={JSON.stringify(stops)} />
+
+<script>
+	(() => {
+		const raw = document.getElementById('pb-category-stops')?.textContent;
+		if (!raw) return;
+		let stops: { id: string; href: string; label: string }[] = [];
+		try {
+			stops = JSON.parse(raw);
+		} catch {
+			return;
+		}
+		if (!Array.isArray(stops) || stops.length < 2) return;
+
+		const normalize = (path: string) => {
+			if (!path) return '/';
+			return path.replace(/\/+$/, '') || '/';
+		};
+
+		const currentPath = normalize(window.location.pathname);
+		/** On post detail, treat as that post's category tab for adjacent switching. */
+		let idx = stops.findIndex((s) => normalize(s.href) === currentPath);
+		if (idx < 0) {
+			const activeCat = document.querySelector(
+				'[data-nav-scroll] a.active:not([href="/"])'
+			) as HTMLAnchorElement | null;
+			if (activeCat?.getAttribute('href')) {
+				idx = stops.findIndex(
+					(s) => normalize(s.href) === normalize(activeCat.getAttribute('href') || '')
+				);
+			}
+		}
+
+		const scroller = document.querySelector('[data-nav-scroll]');
+		const active = scroller?.querySelector('a.active');
+		if (scroller && active instanceof HTMLElement) {
+			requestAnimationFrame(() => {
+				active.scrollIntoView({
+					inline: 'center',
+					block: 'nearest',
+					behavior: 'smooth',
+				});
+			});
+		}
+
+		const go = (delta: number) => {
+			if (idx < 0) return;
+			const next = stops[idx + delta];
+			if (!next) return;
+			window.location.assign(next.href);
+		};
+
+		const surface =
+			document.querySelector('[data-category-swipe]') || document.body;
+
+		let startX = 0;
+		let startY = 0;
+		let tracking = false;
+
+		const onStart = (x: number, y: number) => {
+			startX = x;
+			startY = y;
+			tracking = true;
+		};
+		const onEnd = (x: number, y: number) => {
+			if (!tracking) return;
+			tracking = false;
+			const dx = x - startX;
+			const dy = y - startY;
+			if (Math.abs(dx) < 56) return;
+			if (Math.abs(dx) < Math.abs(dy) * 1.2) return;
+			go(dx < 0 ? 1 : -1);
+		};
+
+		surface.addEventListener(
+			'touchstart',
+			(e) => {
+				const te = e as TouchEvent;
+				if (te.touches.length !== 1) return;
+				const t = te.touches[0];
+				onStart(t.clientX, t.clientY);
+			},
+			{ passive: true }
+		);
+		surface.addEventListener(
+			'touchend',
+			(e) => {
+				const te = e as TouchEvent;
+				const t = te.changedTouches[0];
+				if (!t) return;
+				onEnd(t.clientX, t.clientY);
+			},
+			{ passive: true }
+		);
+
+		let wheelAcc = 0;
+		let wheelTimer = 0;
+		surface.addEventListener(
+			'wheel',
+			(e) => {
+				const we = e as WheelEvent;
+				if (Math.abs(we.deltaX) <= Math.abs(we.deltaY)) return;
+				if (Math.abs(we.deltaX) < 8) return;
+				wheelAcc += we.deltaX;
+				window.clearTimeout(wheelTimer);
+				wheelTimer = window.setTimeout(() => {
+					if (Math.abs(wheelAcc) > 40) {
+						go(wheelAcc > 0 ? 1 : -1);
+					}
+					wheelAcc = 0;
+				}, 80);
+			},
+			{ passive: true }
+		);
+
+		window.addEventListener('keydown', (e) => {
+			const tag = (e.target as HTMLElement | null)?.tagName || '';
+			if (tag === 'INPUT' || tag === 'TEXTAREA' || e.isComposing) return;
+			if (e.key === 'ArrowLeft') {
+				e.preventDefault();
+				go(-1);
+			} else if (e.key === 'ArrowRight') {
+				e.preventDefault();
+				go(1);
+			}
+		});
+
+		document.querySelectorAll('[data-cat-prev]').forEach((el) => {
+			el.addEventListener('click', (ev) => {
+				ev.preventDefault();
+				go(-1);
+			});
+		});
+		document.querySelectorAll('[data-cat-next]').forEach((el) => {
+			el.addEventListener('click', (ev) => {
+				ev.preventDefault();
+				go(1);
+			});
+		});
+	})();
+</script>

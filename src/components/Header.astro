@@ -29,24 +29,29 @@ if (catMatch) {
 ---
 
 <header class="site-header">
-	<nav class="container nav">
+	<nav class="container nav" aria-label="主导航">
 		<a class="brand" href="/">
 			<span class="brand-name">{brandPrimary}</span>
 			<span class="brand-code">{brandSecondary}</span>
 		</a>
-		<div class="links">
-			<HeaderLink href="/" active={isHome}>首页</HeaderLink>
-			{
-				forumCategories.length > 0 ? (
-					forumCategories.map((cat) => (
-						<HeaderLink href={`/logs/c/${cat.id}/`} active={activeCategoryId === Number(cat.id)}>
-							{cat.name}
-						</HeaderLink>
-					))
-				) : (
-					<HeaderLink href="/logs/">日志</HeaderLink>
-				)
-			}
+		<div class="links-wrap">
+			<div class="links" data-nav-scroll>
+				<HeaderLink href="/" active={isHome}>首页</HeaderLink>
+				{
+					forumCategories.length > 0 ? (
+						forumCategories.map((cat) => (
+							<HeaderLink
+								href={`/logs/c/${cat.id}/`}
+								active={activeCategoryId === Number(cat.id)}
+							>
+								{cat.name}
+							</HeaderLink>
+						))
+					) : (
+						<HeaderLink href="/logs/">日志</HeaderLink>
+					)
+				}
+			</div>
 		</div>
 	</nav>
 </header>
@@ -64,7 +69,6 @@ if (catMatch) {
 	.nav {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: 1rem;
 		min-height: 4rem;
 	}
@@ -72,6 +76,7 @@ if (catMatch) {
 	.brand {
 		display: flex;
 		flex-direction: column;
+		flex-shrink: 0;
 		text-decoration: none;
 		color: var(--ink);
 		line-height: 1.1;
@@ -91,21 +96,53 @@ if (catMatch) {
 		text-transform: uppercase;
 	}
 
+	.links-wrap {
+		flex: 1;
+		min-width: 0;
+		position: relative;
+		mask-image: linear-gradient(
+			90deg,
+			transparent 0,
+			#000 0.75rem,
+			#000 calc(100% - 0.75rem),
+			transparent 100%
+		);
+	}
+
 	.links {
 		display: flex;
-		flex-wrap: wrap;
+		flex-wrap: nowrap;
 		align-items: center;
-		justify-content: flex-end;
 		gap: 0.15rem 0.85rem;
+		overflow-x: auto;
+		overflow-y: hidden;
+		-webkit-overflow-scrolling: touch;
+		scrollbar-width: thin;
+		scroll-snap-type: x proximity;
+		scroll-padding-inline: 0.5rem;
+		padding-block: 0.35rem;
+		padding-inline: 0.15rem;
+	}
+
+	.links::-webkit-scrollbar {
+		height: 3px;
+	}
+
+	.links::-webkit-scrollbar-thumb {
+		background: rgba(21, 32, 43, 0.2);
+		border-radius: 99px;
 	}
 
 	.links :global(a) {
+		flex: 0 0 auto;
 		color: var(--ink-soft);
 		text-decoration: none;
 		font-size: 0.92rem;
 		font-weight: 500;
-		padding: 0.35rem 0;
+		padding: 0.4rem 0.15rem;
 		border-bottom: 2px solid transparent;
+		scroll-snap-align: center;
+		white-space: nowrap;
 		transition:
 			color 0.2s var(--ease),
 			border-color 0.2s var(--ease);
@@ -120,12 +157,24 @@ if (catMatch) {
 	@media (max-width: 720px) {
 		.nav {
 			flex-direction: column;
-			align-items: flex-start;
-			padding-block: 0.85rem;
+			align-items: stretch;
+			padding-block: 0.75rem;
+			gap: 0.55rem;
+			min-height: 0;
+		}
+
+		.links-wrap {
+			margin-inline: -0.15rem;
 		}
 
 		.links {
-			justify-content: flex-start;
+			gap: 0.15rem 1rem;
+			padding-inline: 0.25rem;
+		}
+
+		.links :global(a) {
+			font-size: 0.95rem;
+			padding: 0.45rem 0.2rem;
 		}
 	}
 </style>

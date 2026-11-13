@@ -1,6 +1,8 @@
 # 工作室 Discussions 置顶草稿（community）
 
-复制到 https://github.com/liuyuliangbox/community/discussions （建议分类 Studio / General）：
+已发欢迎帖：https://github.com/liuyuliangbox/community/discussions/1  
+
+如需再置顶，可复制到 General：
 
 ---
 
@@ -19,10 +21,10 @@ Primary communities (accounts, posts, site CMS) live on our bbs sites.
 - Game: https://bbs-game.aridjaya.eu.org  
 - Paint Board: https://bbs-paint-board.aridjaya.eu.org  
 
-## How categories are used
+## Categories
 
-- **Site · Project Turn** / **Site · Paint Board** (or current Announcements / Show and tell): page comments via Giscus — please prefer commenting on the site page.
-- **Project Turn** / **Paint Board**: open product chat for GitHub users.
-- **Studio**: cross-project intros, studio news.
+- **Project Turn** — game site Giscus + game chat  
+- **Paint Board** — paint site Giscus + paint chat  
+- **General** — cross-project intros  
 
 中文用户请优先使用 bbs 社区；此处评论需 GitHub 登录。

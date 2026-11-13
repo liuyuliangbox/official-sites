@@ -1,4 +1,5 @@
 ---
+import CategoryPager from '../../../components/CategoryPager.astro';
 import CoverPlaceholder from '../../../components/CoverPlaceholder.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import LogPostDetail from '../../../components/LogPostDetail.astro';
@@ -38,11 +39,13 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 		<BaseLayout title={singlePost.title} description={singlePost.summary || singlePost.title}>
 			<main class="container log-main">
 				<LogPostDetail post={singlePost} eyebrow={category.name} />
+				<CategoryPager />
 			</main>
 		</BaseLayout>
 	) : (
 		<BaseLayout title={pageTitle} description={pageDescription}>
 			<main class="container page fade-up">
+				<p class="swipe-hint" aria-hidden="true">左右滑动可切换栏目</p>
 				<h1>{pageTitle}</h1>
 				{pageLead ? <p class="lead">{pageLead}</p> : null}
 
@@ -77,6 +80,7 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 						))}
 					</ul>
 				)}
+				<CategoryPager />
 			</main>
 		</BaseLayout>
 	)
@@ -89,6 +93,15 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 
 	.page {
 		padding: 3rem 0 4rem;
+	}
+
+	.swipe-hint {
+		display: none;
+		margin: 0 0 0.75rem;
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--ink-soft);
 	}
 
 	h1 {
@@ -179,6 +192,10 @@ const singlePost = posts.length === 1 ? getForumPost(posts[0].id) : null;
 	}
 
 	@media (max-width: 720px) {
+		.swipe-hint {
+			display: block;
+		}
+
 		.log-list a {
 			grid-template-columns: 5.5rem 1fr;
 			gap: 0.75rem 0.9rem;

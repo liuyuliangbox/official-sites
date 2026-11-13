@@ -1,7 +1,11 @@
 ---
 import LogPostDetail from '../../components/LogPostDetail.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getForumPost, getForumPostIndex } from '../../lib/forum';
+import {
+	getForumCategories,
+	getForumPost,
+	getForumPostIndex,
+} from '../../lib/forum';
 
 export function getStaticPaths() {
 	return getForumPostIndex().map((post) => ({
@@ -14,16 +18,117 @@ const post = getForumPost(id!);
 if (!post) {
 	return Astro.redirect('/logs/');
 }
+
+const categories = getForumCategories();
+const stops = [
+	{ href: '/', label: '首页' },
+	...categories.map((c) => ({ href: `/logs/c/${c.id}/`, label: c.name })),
+];
+const categoryHref =
+	post.category_id != null ? `/logs/c/${post.category_id}/` : null;
+const idx = categoryHref
+	? stops.findIndex(
+			(s) => s.href.replace(/\/+$/, '') === categoryHref.replace(/\/+$/, '')
+		)
+	: -1;
+const prev = idx > 0 ? stops[idx - 1] : null;
+const next = idx >= 0 && idx < stops.length - 1 ? stops[idx + 1] : null;
 ---
 
 <BaseLayout title={post.title} description={post.summary || post.title}>
 	<main class="container log-main">
 		<LogPostDetail post={post} />
+		{
+			idx >= 0 && (prev || next) ? (
+				<nav class="cat-pager" aria-label="相邻栏目">
+					{prev ? (
+						<a class="pager-link prev" href={prev.href}>
+							<span class="dir">上一栏</span>
+							<span class="name">{prev.label}</span>
+						</a>
+					) : (
+						<span class="pager-link placeholder" />
+					)}
+					{next ? (
+						<a class="pager-link next" href={next.href}>
+							<span class="dir">下一栏</span>
+							<span class="name">{next.label}</span>
+						</a>
+					) : (
+						<span class="pager-link placeholder" />
+					)}
+				</nav>
+			) : null
+		}
 	</main>
 </BaseLayout>
 
 <style>
 	.log-main {
 		padding: 2.5rem 0 4rem;
+	}
+
+	.cat-pager {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 0.75rem;
+		margin-top: 2.5rem;
+		padding-top: 1.5rem;
+		border-top: 1px solid var(--line);
+	}
+
+	.pager-link {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		padding: 0.85rem 1rem;
+		border-radius: 0.55rem;
+		border: 1px solid var(--line);
+		text-decoration: none;
+		color: inherit;
+		background: rgba(255, 255, 255, 0.35);
+		transition:
+			border-color 0.2s var(--ease),
+			transform 0.2s var(--ease),
+			background 0.2s var(--ease);
+	}
+
+	.pager-link:hover {
+		border-color: var(--accent);
+		background: rgba(255, 255, 255, 0.55);
+		transform: translateY(-1px);
+	}
+
+	.pager-link.next {
+		text-align: right;
+		justify-self: end;
+		width: 100%;
+	}
+
+	.pager-link.prev {
+		justify-self: start;
+		width: 100%;
+	}
+
+	.pager-link.placeholder {
+		visibility: hidden;
+		pointer-events: none;
+		border: none;
+		background: transparent;
+	}
+
+	.dir {
+		font-size: 0.75rem;
+		font-weight: 600;
+		letter-spacing: 0.04em;
+		color: var(--ink-soft);
+		text-transform: uppercase;
+	}
+
+	.name {
+		font-family: var(--font-display);
+		font-size: 1.05rem;
+		font-weight: 700;
+		color: var(--ink);
 	}
 </style>
